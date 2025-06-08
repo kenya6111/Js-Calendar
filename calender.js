@@ -1,42 +1,44 @@
-if (process.argv.length <= 2) {
-	//引数指定のない場合
+main();
+
+function main() {
 	const now = new Date();
-	const currentYear = now.getFullYear();
-	const currentMonth = now.getMonth();
+	const year = now.getFullYear();
+	let month;
+	let firstDay;
+	let endDate;
 
-	// 該当月の最終日取得
-	now.setMonth(now.getMonth() + 1, 0);
-	const endDate = now.getDate();
+	// -mオプションなし
+	if (process.argv.length <= 2) {
+		month = now.getMonth() + 1;
+		// 該当月の最終日取得
+		now.setMonth(now.getMonth() + 1, 0);
+		endDate = now.getDate();
 
-	// 該当月の初日取得
-	now.setDate(1);
-	const firstDay = now.getDay();
+		// 該当月の初日取得
+		now.setDate(1);
+		firstDay = now.getDay();
+	} else if (
+		// -mオプションあり
+		process.argv[2] == "-m" &&
+		process.argv[3] >= 0 &&
+		process.argv[3] <= 12
+	) {
+		month = process.argv[3];
+		// 該当月の最終日取得
+		now.setMonth(month, 0);
+		endDate = now.getDate();
 
-	printTitle(currentMonth + 1, currentYear);
+		// 該当月の初日取得
+		now.setDate(1);
+		firstDay = now.getDay();
+	} else {
+		console.log("引数が不正です");
+		process.exit(0);
+	}
+
+	printTitle(month, year);
 	printDays();
 	printCalender(firstDay, endDate);
-} else if (
-	process.argv[2] == "-m" &&
-	process.argv[3] >= 0 &&
-	process.argv[3] <= 12
-) {
-	const now = new Date();
-	const currentYear = now.getFullYear();
-	const inputMonth = process.argv[3];
-
-	// 該当月の最終日取得
-	now.setMonth(inputMonth, 0);
-	const endDate = now.getDate();
-
-	// 該当月の初日取得
-	now.setDate(1);
-	const firstDay = now.getDay();
-
-	printTitle(inputMonth, currentYear);
-	printDays();
-	printCalender(firstDay, endDate);
-} else {
-	console.log("引数の値が不正です");
 }
 
 function printTitle(month, year) {
