@@ -52,19 +52,11 @@ function printDays() {
 
 function printCalender(firstDay, endDate) {
 	let dateCount = 1;
-	for (let i = 0; i < 42; i++) {
-		// 月曜が来たら改行
-		if (i !== 0 && i % 7 == 0) {
-			console.log();
-		}
-		if (i < firstDay) {
-			// --月の初日の曜日までは空白で埋める
-			process.stdout.write("   ");
-			continue;
-		} else {
-			if (dateCount > endDate) break;
-			process.stdout.write(dateCount.toString().padEnd(3, " "));
-			dateCount++;
-		}
+	process.stdout.write("   ".repeat(firstDay));
+	for (let i = firstDay; i < 42; i++) {
+		if (i !== 0 && i % 7 == 0) console.log();
+		if (dateCount > endDate) break;
+		process.stdout.write(dateCount.toString().padEnd(3, " "));
+		dateCount++;
 	}
 }
