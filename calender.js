@@ -1,40 +1,32 @@
 main();
 
 function main() {
+	const [_, __, optionKey, optionValue] = process.argv;
 	const now = new Date();
 	const year = now.getFullYear();
-	let month;
-	let firstDay;
-	let endDate;
+	let month = now.getMonth() + 1;
 
-	// -mオプションなし
-	if (process.argv.length <= 2) {
-		month = now.getMonth() + 1;
-		// 該当月の最終日取得
-		now.setMonth(now.getMonth() + 1, 0);
-		endDate = now.getDate();
-
-		// 該当月の初日取得
-		now.setDate(1);
-		firstDay = now.getDay();
-	} else if (
-		// -mオプションあり
-		process.argv[2] == "-m" &&
-		process.argv[3] >= 0 &&
-		process.argv[3] <= 12
-	) {
-		month = process.argv[3];
-		// 該当月の最終日取得
-		now.setMonth(month, 0);
-		endDate = now.getDate();
-
-		// 該当月の初日取得
-		now.setDate(1);
-		firstDay = now.getDay();
-	} else {
+	if (optionKey && optionKey !== "-m") {
 		console.log("引数が不正です");
 		process.exit(0);
 	}
+
+	if (optionKey === "-m") {
+		if (parseInt(optionValue) < 0 || parseInt(optionValue) > 12) {
+			console.log("引数が不正です");
+			process.exit(0);
+		}
+		month = parseInt(optionValue);
+	}
+
+	calendar_display(year, month, now);
+}
+
+function calendar_display(year, month, now) {
+	now.setMonth(month, 0);
+	endDate = now.getDate();
+	now.setDate(1);
+	firstDay = now.getDay();
 
 	printTitle(month, year);
 	printDays();
